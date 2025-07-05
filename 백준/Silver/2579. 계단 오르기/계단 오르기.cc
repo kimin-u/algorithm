@@ -1,34 +1,27 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
+ 
 using namespace std;
 
+vector<int> dp;
 
-int main(void) {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
 
 	int n; cin >> n;
-	vector<int> lst(n + 1);
-	for (int i = 1; i <= n; i++) {
-		cin >> lst[i];
+	vector<int> vec(n + 1);
+	vector<int> dp(300 + 1);
+	for (int i = 1; i < n + 1; i++) {
+		cin >> vec[i];
 	}
-	//한번에 하나 또는 두개 오른다 
-	//세개 연속으로 밟기 안됨
 
-	//dp[i] = i번째 계단 까지의 최댓값을 의미;
-	vector<int> dp(301);
 	dp[0] = 0;
-	dp[1] = lst[1];
-	dp[2] = lst[1] + lst[2];
+	dp[1] = vec[1];
+	dp[2] = vec[1] + vec[2];
 
-	for (int i = 3; i <= n; i++) {
-		dp[i] = max(dp[i - 2] + lst[i], dp[i - 3] + lst[i - 1] + lst[i]);
+	for (int i = 3; i < n + 1; i++) {
+		dp[i] = max(dp[i - 2], dp[i - 3] + vec[i - 1]) + vec[i];
 	}
-
 	cout << dp[n];
-
-	return 0;
-
 }
