@@ -10,7 +10,7 @@ int main() {
 	cin.tie(0); cout.tie(0);
 
 	int n; cin >> n;
-	dp.assign(n + 1, -1);
+	dp.assign(1001, -1);
 	dp[1] = 1;
 	dp[2] = 2;
 	for (int i = 3; i < n + 1; i++) {
