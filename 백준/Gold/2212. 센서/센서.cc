@@ -4,34 +4,36 @@
 
 using namespace std;
 
-int n, k;
+bool compare(int a, int b) {
+	return a > b;
+}
 
-int main(void) {
-	cin >> n >> k;
-	vector<int> lst(n);
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
+
+	int n, k; cin >> n >> k;
+
+	vector<int> sensor;
 	for (int i = 0; i < n; i++) {
-		cin >> lst[i];
+		int num; cin >> num;
+		sensor.push_back(num);		
+	}
+	sort(sensor.begin(), sensor.end());
+
+	vector<int> distance;
+	for (int i = 0; i < n-1; i++) {
+		int dist = sensor[i + 1] - sensor[i];
+		distance.push_back(dist);
 	}
 
-	sort(lst.begin(), lst.end());
-
-	vector<int> dist;
-	for (int i = 0; i < n - 1; i++) {
-		dist.push_back(lst[i + 1] - lst[i]);
-	}
-
-	sort(dist.begin(), dist.end());
-
-	/*for (int i = 0; i < n - 1; i++) {
-		cout << dist[i] << " ";
-	}*/
-	// 앞에서부터 n-k개;
+	sort(distance.begin(), distance.end(), compare);
 
 	int result = 0;
-	for (int i = 0; i < n - k; i++) {
-		result += dist[i];
+	for (int i = k - 1; i < distance.size(); i++) {
+		result += distance[i];
 	}
-
 	cout << result;
-	return 0;
+
+
 }
