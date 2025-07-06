@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-
+#include <algorithm>
 using namespace std;
 
 vector<int> vec1;
@@ -27,15 +27,9 @@ int main() {
 	dp[4][0] = min(dp[3][0] + vec1[3], dp[2][0] + vec2[2]);
 	dp[4][1] = dp[1][0] + k;
 
-	for (int i = 5; i < n+1; i++) {
-		// 작은 점프
-		dp[i][0] = min(dp[i][0], dp[i - 1][0] + vec1[i - 1]);
-		dp[i][1] = min(dp[i][1], dp[i - 1][1] + vec1[i - 1]);
-		// 큰 점프
-		dp[i][0] = min(dp[i][0], dp[i - 2][0] + vec2[i - 2]);
-		dp[i][1] = min(dp[i][1], dp[i - 2][1] + vec2[i - 2]);
-		// 매우 큰 점프는 아직 안 쓴 경우만
-		dp[i][1] = min(dp[i][1], dp[i - 3][0] + k);
+	for (int i = 5; i < n + 1; i++) {
+		dp[i][0] = min(dp[i - 1][0] + vec1[i - 1],dp[i - 2][0] + vec2[i - 2]);
+		dp[i][1] = min({ dp[i - 1][1] + vec1[i - 1], dp[i - 2][1] + vec2[i - 2], dp[i - 3][0] + k });
 	}
 	cout << min(dp[n][0], dp[n][1]) << '\n';
 
