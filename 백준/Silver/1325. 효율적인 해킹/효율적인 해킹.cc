@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -18,6 +19,25 @@ void dfs(int i) {
 	}
 }
 
+void bfs(int i) {
+	queue<int> q;
+	visited[i] = 1;
+	cnt++;
+	q.push(i);
+
+	while (!q.empty()) {
+		int cur = q.front(); q.pop();
+		for (int j = 0; j < graph[cur].size(); j++) {
+			int next = graph[cur][j];
+			if (visited[next] == 1) continue;
+			visited[next] = 1;
+			q.push(next);
+			cnt++;
+		}
+	}
+	
+}
+
 int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
@@ -34,7 +54,8 @@ int main() {
 	for (int i = 1; i <= n; i++) {
 		visited.assign(n + 1, 0);
 		cnt = 0;
-		dfs(i);
+		//dfs(i);
+		bfs(i);
 		result[i] = cnt;
 		if (max < cnt) max = cnt;
 	}
