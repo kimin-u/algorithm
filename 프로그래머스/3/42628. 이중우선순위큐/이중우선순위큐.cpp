@@ -4,7 +4,6 @@
 #include <unordered_map>
 
 using namespace std;
-
 vector<int> solution(vector<string> operations) {
     vector<int> answer;
     priority_queue<int, vector<int>, less<int>> max_pq;
