@@ -36,7 +36,6 @@ string solution(string video_len, string pos, string op_start, string op_end, ve
         }
     }
     if (cur >= start && cur < end) cur = end;
-
     answer = seconds_to_time(cur);
     return answer;
 }
