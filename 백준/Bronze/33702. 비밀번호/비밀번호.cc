@@ -5,16 +5,12 @@
 using namespace std;
 
 int k;
+int cnt = 0;
 
 vector<int> di = { -1,1,0,0 };
 vector<int> dj = { 0,0,-1,1 };
 vector<vector<int>> visited;
 vector<vector<int>> graph;
-
-int cnt = 0;
-void clear_visited() {
-	visited.assign(3, vector<int>(3, 0));
-}
 
 bool check_visited() {
 	for (int i = 0; i < 3; i++) {
