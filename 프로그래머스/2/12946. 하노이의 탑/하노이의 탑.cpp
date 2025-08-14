@@ -5,9 +5,8 @@ using namespace std;
 
 vector<vector<int>> answer;
 void hanoi(int src, int tmp, int dest, int n){
-    if (n==1) {
+    if (n==1) 
         answer.push_back({src, dest});
-    }
     else{
         hanoi(src, dest,tmp,n-1);
         answer.push_back({src,dest});
