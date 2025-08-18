@@ -9,7 +9,7 @@ bool solution(string s) {
         return false;
     
     for (auto c: s){
-        if (c-'0' < 0 || c-'0' >9 ) return false;
+        if (!isdigit(c)) return false;
     }
     return answer;
 }
