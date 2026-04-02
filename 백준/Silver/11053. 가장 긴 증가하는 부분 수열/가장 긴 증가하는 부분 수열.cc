@@ -14,11 +14,11 @@ int main(){
 
     cin>>n;
     dp.assign(n+1, 1);
+    vec.assign(n,0);
 
     dp[1]=1;
     for (int i=0; i<n; i++){
-        int num; cin>>num;
-        vec.push_back(num);
+        cin>>vec[i];
     }
 
     for (int i=0; i<n; i++){
