@@ -4,26 +4,31 @@
 
 using namespace std;
 
+vector<int> dp;
+vector<int> vec;
 int n;
 
-int main(void) {
-	cin >> n;
-	vector<int> lst(n);
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
 
-	for (int i = 0; i < n; i++)
-		cin >> lst[i];
+    cin>>n;
+    dp.assign(n+1, 1);
 
-	vector<int> dp(n);
-	dp[0] = 1;
+    dp[1]=1;
+    for (int i=0; i<n; i++){
+        int num; cin>>num;
+        vec.push_back(num);
+    }
 
-	for (int i = 1; i < n; i++) {
-		dp[i] = 1;
-		for (int j = i - 1; j >= 0; j--) {
-			if (lst[i] > lst[j])
-				dp[i] = max(dp[i], dp[j] + 1);
-		}
-	}
+    for (int i=0; i<n; i++){
+        for (int j=i+1; j<n; j++){
+            if (vec[i] < vec[j]){
+                dp[j+1] = max(dp[j+1], dp[i+1] + 1);
+            }
+        }
+    }
 
-	cout << *max_element(dp.begin(), dp.end());
-	return 0;
+    cout<<*max_element(dp.begin(), dp.end());
+    
 }
