@@ -4,29 +4,28 @@
 using namespace std;
 
 int n;
-vector<int> vec;
-int b,c;
+vector<long long> a;
+long long b, c;
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
 
     cin>>n;
-    for (int i=0; i<n; i++){
-        int num; cin>>num;
-        vec.push_back(num);
+    a.assign(n,0);
+    for(int i=0; i<n; i++){
+        cin>>a[i];
     }
-
     cin>>b>>c;
 
     long long answer = 0;
 
     for (int i=0; i<n; i++){
+        a[i] -= b;
         answer++;
-        int tmp = vec[i] - b;
-        if (tmp > 0) {
-            answer += (tmp + c - 1) / c;
-        }
+        if (a[i] <=0) continue;
+        answer += a[i]/c;
+        if (a[i]%c != 0) answer++;
     }
     cout<<answer;
 }
