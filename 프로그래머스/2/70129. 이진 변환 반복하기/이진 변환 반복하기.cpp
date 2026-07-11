@@ -1,32 +1,49 @@
 #include <string>
+#include <algorithm>
 #include <vector>
 
 using namespace std;
 
-vector<int> solution(string s) {
-    vector<int> answer;
-    int cnt_bin = 0; int cnt_zero = 0;
+string to_binary(int num){
+    string ret="";
     
     while (true){
-        if (s=="1") break;
-        cnt_bin++;
-        int tmp;
-        for (auto c: s){
-            if (c=='0') cnt_zero++;
-            else tmp++;
+        if (num == 0) break;
+        
+        if (num%2==0) ret+='0';
+        else{
+            ret += '1';
+        }
+        num/=2;
+    }
+    reverse(ret.begin(), ret.end());
+    
+    return ret;
+}
+
+vector<int> solution(string s) {
+    vector<int> answer;
+    
+    int whileloopcnt = 0;
+    int zerocnt = 0;
+    while(true){
+        int onecnt=0;
+        for (auto& c: s){
+            if (c == '1'){
+                onecnt++;
+            }
         }
         
-        //upate s; 
-        s.clear();
-        while (tmp!=0){
-            if (tmp%2==1){
-                s+='1';
-            }
-            else s+='0';
-            tmp/=2;
-        }
+        if (s=="1") break;
+        
+        whileloopcnt++;
+        int tmpzero = s.length() - onecnt;
+        zerocnt += tmpzero;
+        s = to_binary(onecnt);
     }
-    answer.push_back(cnt_bin);
-    answer.push_back(cnt_zero);
+    
+    
+    answer.push_back(whileloopcnt);
+    answer.push_back(zerocnt);
     return answer;
 }
