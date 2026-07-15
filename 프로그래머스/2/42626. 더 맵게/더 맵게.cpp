@@ -4,22 +4,28 @@
 
 using namespace std;
 
-int solution(vector<int> scoville, int K) {
+struct compare{
+    bool operator() (int a, int b){
+        return a>b;
+    }   
+};
+
+int solution(vector<int> scoville, int k) {
     int answer = 0;
-    priority_queue<int, vector<int>, greater<int>> min_pq;
+    priority_queue<int, vector<int>, compare> min_pq;
     
-    for (int i=0; i<scoville.size(); i++){
-        min_pq.push(scoville[i]);
+    for (auto &scov :scoville){
+        min_pq.push(scov);
     }
     
     while (true){
-        if (min_pq.top() >=K) break;
+        if (min_pq.top() >= k) break;
+        if (min_pq.size() == 1) return -1;
+        int a = min_pq.top(); min_pq.pop();
+        int b = min_pq.top(); min_pq.pop();
+        int tmp = a + b*2;
+        min_pq.push(tmp);
         answer++;
-        if (min_pq.size()<2) return -1;
-        int first = min_pq.top(); min_pq.pop();
-        int second = min_pq.top(); min_pq.pop();
-        int next = first + second*2;
-        min_pq.push(next);
     }
     return answer;
 }
