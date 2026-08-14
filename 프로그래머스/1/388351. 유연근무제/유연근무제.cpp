@@ -1,30 +1,53 @@
 #include <string>
 #include <vector>
+#include <algorithm>
+
 
 using namespace std;
 
-int toMinutes(int time) {
-    return (time / 100) * 60 + (time % 100);
+int int2time(int time){
+    string hh = to_string(time / 100);
+    string mm = to_string(time % 100);
+    
+    int h = stoi(hh) * 60;
+    int ret = h + stoi(mm);
+    
+    return ret;
 }
+
 
 int solution(vector<int> schedules, vector<vector<int>> timelogs, int startday) {
     int answer = 0;
+    
+    vector<int> exception;
+    if (6-startday >= 0 ){
+        exception.push_back(6-startday);
+    }
+    else{
+        exception.push_back(6);
+    }
+    exception.push_back(7-startday);
+    
+    
     int n = schedules.size();
-    int sat =( 6-startday + 7)%7;
-    int sun = (sat+1)%7;
     for (int i=0; i<n; i++){
-        int limit = toMinutes(schedules[i]) + 10;
-        int flag = true;
-        for (int j=0; j<timelogs[i].size(); j++){
-            if (j == sat || j == sun) continue;
-            int log_time = toMinutes(timelogs[i][j]);
-            if (log_time > limit) {
-                flag = false;
+        int flag = 1;
+        int pivot = int2time(schedules[i]);
+        for (int day = 0; day < timelogs[i].size(); day++){
+            if (find(exception.begin(), exception.end(), day) != exception.end()){
+                continue;
+            }
+            int log = int2time(timelogs[i][day]);
+            
+            if (log > pivot + 10){
+                flag = 0;
                 break;
             }
         }
-        if (flag) answer++;
-        
+        if (flag){
+            answer++;
+        }
     }
+    
     return answer;
 }
