@@ -5,16 +5,13 @@
 
 using namespace std;
 
-typedef long long ll;
-ll INF = 1e18;
-
 int n, k, l;
-vector<vector<ll>> graph;
+vector<vector<int>> graph;
 vector<pair<int, int>> robots;
 vector<vector<int>> dist;
 
-vector<int> di = {0,-1,0,1};
-vector<int> dj = {-1,0,1,0};
+vector<int> di = {-1,0,1,0};
+vector<int> dj = {0,-1,0,1};
 
 void move_robots(int idx){
     dist.assign(n, vector<int>(n, -1));
@@ -26,20 +23,15 @@ void move_robots(int idx){
     queue<pair<int, int>> q;
     q.push({i,j});
     dist[i][j] = 0;
-    if (graph[i][j] > 0) return;
 
     //내가 있는 지점으로부터 가장 가까운 오염된 격자로 이동한다.
     //bfs를 순서대로 돌리면서 오염된 격자를 만나면 탐색 종료 loop break.
-    ll min_dist = INF;
-    int mi = n+1; 
-    int mj = n+1;
 
+    bool flag = false;
     while (!q.empty()){
         int ci = q.front().first;
         int cj = q.front().second;
         q.pop();
-
-        if (dist[ci][cj] >= min_dist) break;
 
         for (int k=0; k<4; k++){
             int ni = ci + di[k];
@@ -64,29 +56,23 @@ void move_robots(int idx){
 
             //방문하지 않은곳이면 간다. 그 중에 오염된 격자면 멈추기까지
             if (dist[ni][nj] != -1) continue;
-
             dist[ni][nj] = dist[ci][cj] +1;
-
-            if (graph[ni][nj] >= 1){
-                min_dist = dist[ni][nj];
-                if (ni < mi){
-                    mi = ni; mj = nj;
-                }
-                else if (ni == mi && nj < mj){
-                    mi = ni; mj = nj;
-                }
-            }
-            else{
-                q.push({ni, nj});
-            }
+            q.push({ni, nj});
         }
     }
 
-    if (min_dist != INF){
-        robots[idx].first = mi;
-        robots[idx].second = mj;
+    int best = 1e9, bi = -1, bj = -1;
+    for (int a = 0; a < n; a++){
+        for (int b = 0; b < n; b++){
+            if (dist[a][b] < 0) continue;     // 도달 불가(-1) 또는 시작 칸(0) 제외
+            if (graph[a][b] <= 0) continue;    // 오염된 칸만
+            if (dist[a][b] < best){            //  작을 때만 갱신
+                best = dist[a][b];
+                bi = a; bj = b;
+            }
+        }
     }
-    
+    if (bi != -1) robots[idx] = {bi, bj};
 }
 
 void cleaning(int idx){
@@ -94,22 +80,22 @@ void cleaning(int idx){
     int j = robots[idx].second;
 
     //오른쪽 아래쪽, 왼쪽, 위쪽 방향으로 합을 계산 해 나감.
-    ll sum_max = -INF;
+    int sum_max = -1e9;
 
-    ll tmp_sum;
+    int tmp_sum;
     int direction = -1;
     
 
     //오른쪽
-    tmp_sum= min(20LL, graph[i][j]);
+    tmp_sum= min(20, graph[i][j]);
     for (int k = 0; k<4; k++){
-        if (k==0) continue;
+        if (k==1) continue;
         int ni = i + di[k];
         int nj = j + dj[k];
         if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
 
         if (graph[ni][nj] > 0){
-            tmp_sum += min(graph[ni][nj], 20LL);
+            tmp_sum += min(graph[ni][nj], 20);
         }
     }
     if (sum_max < tmp_sum){
@@ -118,15 +104,15 @@ void cleaning(int idx){
     }
 
     //아래쪽
-    tmp_sum= min(20LL, graph[i][j]);
+    tmp_sum= min(20, graph[i][j]);
     for (int k = 0; k<4; k++){
-        if (k==1) continue;
+        if (k==0) continue;
         int ni = i + di[k];
         int nj = j + dj[k];
         if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
 
         if (graph[ni][nj] > 0){
-            tmp_sum += min(graph[ni][nj], 20LL);
+            tmp_sum += min(graph[ni][nj], 20);
         }
     }
     if (sum_max < tmp_sum){
@@ -135,15 +121,15 @@ void cleaning(int idx){
     }
 
     //왼쪽
-    tmp_sum= min(20LL, graph[i][j]);
+    tmp_sum= min(20, graph[i][j]);
     for (int k = 0; k<4; k++){
-        if (k==2) continue;
+        if (k==3) continue;
         int ni = i + di[k];
         int nj = j + dj[k];
         if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
 
         if (graph[ni][nj] > 0){
-            tmp_sum += min(graph[ni][nj], 20LL);
+            tmp_sum += min(graph[ni][nj], 20);
         }
     }
     if (sum_max < tmp_sum){
@@ -152,15 +138,15 @@ void cleaning(int idx){
     }
 
     //위쪽
-    tmp_sum= min(20LL, graph[i][j]);
+    tmp_sum= min(20, graph[i][j]);
     for (int k = 0; k<4; k++){
-        if (k==3) continue;
+        if (k==2) continue;
         int ni = i + di[k];
         int nj = j + dj[k];
         if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
 
         if (graph[ni][nj] > 0){
-            tmp_sum += min(graph[ni][nj], 20LL);
+            tmp_sum += min(graph[ni][nj], 20);
         }
     }
     if (sum_max < tmp_sum){
@@ -169,9 +155,12 @@ void cleaning(int idx){
     }
 
     //direcion 0~3 오른쪽, 아래쪽, 왼쪽 , 위쪽 순서임.
-    graph[i][j] = max(graph[i][j]-20LL, 0LL);
-    int skip_k = direction;
-
+    graph[i][j] = max(graph[i][j]-20, 0);
+    int skip_k;
+    if (direction ==0) skip_k = 1;
+    else if (direction == 1) skip_k =0;
+    else if (direction == 2) skip_k = 3;
+    else if (direction == 3) skip_k = 2;
 
     for (int k = 0; k<4; k++){
         if (k == skip_k) continue;
@@ -180,7 +169,7 @@ void cleaning(int idx){
         if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
 
         if (graph[ni][nj] > 0){
-            graph[ni][nj] = max(0LL, graph[ni][nj] - 20LL);
+            graph[ni][nj] = max(0, graph[ni][nj] - 20);
             if (graph[ni][nj] < 0){
                 graph[ni][nj] = 0;
             }
@@ -199,7 +188,7 @@ void accumulation(){
 }
 
 void diffusion(){
-    vector<vector<ll>> copygraph(n, vector<ll>(n,0));
+    vector<vector<int>> copygraph(n, vector<int>(n,0));
 
     //copy
     for (int i=0; i<n; i++){
@@ -211,7 +200,7 @@ void diffusion(){
     for (int i=0; i<n; i++){
         for(int j=0; j<n; j++){
             if (graph[i][j] == 0){
-                ll tmpsum = 0;
+                int tmpsum = 0;
                 for (int k=0; k<4; k++){
                     int ni = i + di[k];
                     int nj = j + dj[k];
@@ -235,7 +224,7 @@ void diffusion(){
 }
 
 void printing(){
-    ll sum=0;
+    int sum=0;
     for (int i=0; i<n; i++){
         for (int j =0; j<n; j++){
             if (graph[i][j] > 0){
@@ -253,7 +242,7 @@ int main() {
 
     //input
     cin>>n>>k>>l;
-    graph.assign(n, vector<ll>(n, 0));
+    graph.assign(n, vector<int>(n, 0));
 
     //initialize
     for (int i=0; i<n; i++){
