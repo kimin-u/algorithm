@@ -307,20 +307,24 @@ void move_war(){
         if (stone_graph[ci][cj] == 1) continue;        // 석화된 전사는 이동 안 함
 
         for (int step = 0; step < 2; step++){
-            int curd = abs(ci - si) + abs(cj - sj);
+            int curd = abs(ci - si) + abs(cj - sj); // 맨해튼 거리 . 현재 위치에서의 메두사까지와의 거리를 의미 .
 
             for (int t = 0; t < 4; t++){
-                int d = order[step][t];
+                int d = order[step][t]; //방향 순서 
                 int ni = ci + di[d], nj = cj + dj[d];
 
-                if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
+                if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue; //범위초과
+
                 if (stone_graph[ni][nj] == 1) continue;                 // 시야 칸 진입 불가
+
                 if (abs(ni - si) + abs(nj - sj) >= curd) continue;      // 거리가 줄어야 함
 
                 warrior_graph[ci][cj]--;
                 warrior_graph[ni][nj]++;
+
                 ci = ni; cj = nj;
                 movecnt++;
+                
                 break;
             }
 
