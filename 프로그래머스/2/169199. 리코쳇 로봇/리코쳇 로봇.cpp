@@ -54,7 +54,6 @@ void bfs(vector<string> &graph){
                 visited[tmpi][tmpj] = visited[ci][cj] + 1;
                 q.push({tmpi, tmpj});
             }
-            
         }
     }
 }
